@@ -139,8 +139,8 @@ export default {
         this.login.notice = "密码长度为6~16个字符";
         return;
       }
-      this.login.isError = false;
-      this.login.notice = "";
+      // this.login.isError = false;
+      // this.login.notice = "";
       console.log(
         `start login..., username: ${this.login.username} , password: ${this.login.password}`
       );
