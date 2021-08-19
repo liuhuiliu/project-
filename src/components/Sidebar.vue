@@ -23,6 +23,7 @@
 import Avatar from "../components/Avatar.vue";
 import request from "../helpers/request";
 import Auth from "../api/auth";
+import Bus from "../helpers/bus";
 export default {
   components: { Avatar },
   // data: {},
@@ -30,7 +31,9 @@ export default {
     onLogout() {
       console.log("logout");
       Auth.logout().then((res) => {
+        this.$router.push({path:'/login'})
         console.log(res);
+        Bus.$emit('logout-userInfo',{username:'未知'})
       });
     },
   },

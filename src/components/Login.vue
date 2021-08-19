@@ -70,7 +70,7 @@
 <script>
 import request from "../helpers/request";
 import Auth from "../api/auth";
-
+import Bus from "../helpers/bus";
 Auth.getInfo().then((res) => {
   console.log(res);
 });
@@ -124,7 +124,9 @@ export default {
         username: this.register.username,
         password: this.register.password,
       }).then((res) => {
+        Bus.$emit("login-userInfo", { username: this.login.username });
         console.log(res);
+        this.$router.push({ path: "/" });
       });
     },
     onLogin() {
@@ -139,20 +141,27 @@ export default {
         this.login.notice = "密码长度为6~16个字符";
         return;
       }
-      // this.login.isError = false;
-      // this.login.notice = "";
-      console.log(
-        `start login..., username: ${this.login.username} , password: ${this.login.password}`
-      );
-      request("/auth/login", "POST", {
+
+      // console.log(
+      //   `start login..., username: ${this.login.username} , password: ${this.login.password}`
+      // );
+      Auth.login({
         username: this.login.username,
         password: this.login.password,
-      }).then((res) => {
-        console.log(res);
-      });
+      })
+        .then((res) => {
+          console.log(res);
+          this.login.isError = false;
+          this.login.notice = "";
+          Bus.$emit("login-userInfo", { username: this.login.username });
+          this.$router.push({ path: "/" });
+        })
+        .catch((res) => {
+          // console.log(res)
+          this.login.isError = true;
+          this.login.notce = data.msg;
+        });
     },
-    checkUsername(username) {},
-    checkPassword(password) {},
   },
 };
 </script>
